@@ -1,0 +1,131 @@
+ <html>
+<style type="text/css">
+
+body {
+background:#50565F;
+font-size:11px;
+font-family:verdana;
+text-align:center;
+padding-top:30px;
+color:#3D444E;
+}
+
+canvas{
+margin:0px;
+padding:0px;
+background:#3D444E;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px
+}
+</style>
+<body>
+<canvas id="canvas" height="400" width="550">
+</canvas>
+<script type="text/javascript">
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+
+
+var pi2 = Math.PI * 2;
+var px=0;
+var py=0;
+var nx;
+var ny;
+
+var node0 = [-50, -50, -50];
+var node1 = [-50, -50,  50];
+var node2 = [-50,  50, -50];
+var node3 = [-50,  50,  50];
+var node4 = [ 50, -50, -50];
+var node5 = [ 50, -50,  50];
+var node6 = [ 50,  50, -50];
+var node7 = [ 50,  50,  50];
+var nodes = [node0, node1, node2, node3, node4, node5, node6, node7];
+var edge0  = [0, 1];
+var edge1  = [1, 3];
+var edge2  = [3, 2];
+var edge3  = [2, 0];
+var edge4  = [4, 5];
+var edge5  = [5, 7];
+var edge6  = [7, 6];
+var edge7  = [6, 4];
+var edge8  = [0, 4];
+var edge9  = [1, 5];
+var edge10 = [2, 6];
+var edge11 = [3, 7];
+var edges = [edge0, edge1, edge2, edge3, edge4, edge5, edge6, edge7, edge8, edge9, edge10, edge11];
+    function rotateY3D(theta) {
+    var sin_t = Math.sin(theta);
+    var cos_t = Math.cos(theta);
+    
+    for (var n=0; n<nodes.length; n++) {
+        var node = nodes[n];
+        var x = node[0];
+        var z = node[2];
+        node[0] = x * cos_t - z * sin_t;
+        node[2] = z * cos_t + x * sin_t;
+    }
+};
+
+function rotateX3D(theta) {
+    var sin_t = Math.sin(theta);
+    var cos_t = Math.cos(theta);
+    
+    for (var n=0; n<nodes.length; n++) {
+        var node = nodes[n];
+        var y = node[1];
+        var z = node[2];
+        node[1] = y * cos_t - z * sin_t;
+        node[2] = z * cos_t + y * sin_t;
+    }
+};     draw();
+     function draw() {
+      ctx.clearRect(-300, -300, 1000, 1000);
+
+    
+      ctx.strokeStyle = '#9EA2A7';
+
+    for (var e=0; e<12; e++) {
+        var n0 = edges[e][0];
+        var n1 = edges[e][1];
+        var node0 = nodes[n0];
+        var node1 = nodes[n1];
+
+        ctx.beginPath();
+    ctx.moveTo(node0[0], node0[1]);
+    ctx.lineTo(node1[0], node1[1]);
+    ctx.closePath();
+    ctx.stroke();
+  
+    }
+
+    
+    
+    ctx.fillStyle = 'rgb(158, 162, 167)';
+    for (var n=0; n<nodes.length; n++) {
+        var node = nodes[n];
+        ctx.beginPath();
+      ctx.arc(node[0], node[1], 3, 0, pi2, true);
+      ctx.closePath();
+      ctx.fill();
+    
+        
+    }
+
+};
+document.onclick=function(event) {
+nx=event.clientX;
+ny=event.clientY;
+    rotateY3D(nx - px);
+    rotateX3D(ny - py);
+    px=nx;
+    py=ny;
+    draw();
+};
+
+ctx.translate(200, 200);
+</script>
+</body>
+</html>
+
